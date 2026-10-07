@@ -23,20 +23,11 @@ app.get("/", (req, res) => {
 
 app.post("/register", (req, res) => {
 
-    const { name, email, password } = req.body;
-
-    const userFile = path.join(userFolder, "UserInfo.txt");
-
-    const userData = `
-        Name: ${name}
-        Email: ${email}
-        Password: ${password}
-        `;
 
     fs.writeFile(userFile, userData, (err) => {
 
         if (err) {
-            return res.status(500).send("Unable to save user");
+            return res.send("Unable to save user");
         }
 
         res.send("User registered successfully");
@@ -45,12 +36,9 @@ app.post("/register", (req, res) => {
 
 
 
-
 app.post("/login", (req, res) => {
 
-    const { email, password } = req.body;
-
-    const userFile = path.join(userFolder, "UserInfo.txt");
+   
 
     fs.readFile(userFile, "utf8", (err, data) => {
 
@@ -59,13 +47,6 @@ app.post("/login", (req, res) => {
         }
 
         console.log(data);
-
-        if (
-            data.includes(`Email: ${email}`) &&
-            data.includes(`Password: ${password}`)
-        ) {
-            return res.send("Login successful");
-        }
 
         res.send("Invalid email or password");
     });
